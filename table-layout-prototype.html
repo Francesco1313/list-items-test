@@ -355,13 +355,17 @@
       <li>Tags column is narrower. Chips truncated at ~18 characters with tooltip on hover showing full label.</li>
       <li>The date and time are shown on two lines — the date on top, the time below in a smaller, lighter label. This keeps each date column narrower and leaves more horizontal space for the title.</li>
       <li>Row height is determined by the number of group managers. All managers are listed and the row grows to fit them.</li>
-      <li>If a group has more than 4 managers, only the first 4 are shown. A … icon appears below; clicking it expands the row to reveal all managers. <span class="new-badge">new</span></li>
+      <li>If a group has more than 3 managers, only the first 3 are shown. A … icon appears below; clicking it expands the row to reveal all managers.</li>
       <li>Variable row height — rows are not uniform in height across the table.
         <span class="risky-badge">⚠ risky</span>
       </li>
     </ul>
     <div class="risky-explanation">
       <strong>Variable row height risk:</strong> Row heights differ row-by-row depending on the number of managers. This can make the table feel visually uneven and hard to scan at a glance.
+    </div>
+    <div class="info-banner">
+      <span class="info-banner-icon">i</span>
+      <span><strong>Alternative:</strong> all rows have a default fixed height. Titles are displayed on up to two lines, and up to 2 managers are shown by default. If a group has more than 2 managers, only the first 2 are shown. A … icon appears below; clicking it expands the row to reveal all managers.</span>
     </div>
   </div>
 
@@ -518,8 +522,8 @@
             <span class="manager-name">Pearlie Harris</span>
             <span class="manager-name">Marcus Thompson</span>
             <span class="manager-name">Linda Chen</span>
-            <span class="manager-name">Robert Davis</span>
             <div class="manager-overflow">
+              <span class="manager-name">Robert Davis</span>
               <span class="manager-name">Sarah Williams</span>
               <span class="manager-name">James Brown</span>
             </div>
