@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Table Layout Strategies — User Groups Admin</title>
+  <title>List items strategy</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -98,6 +98,35 @@
       margin-top: 1px;
     }
 
+    /* ── Info banner (blue) ── */
+    .info-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      background: #f0f8ff;
+      border: 0.5px solid #b6d9f7;
+      border-radius: 6px;
+      padding: 9px 13px;
+      margin-top: 12px;
+      font-size: 12px;
+      color: #1a6fa8;
+      line-height: 1.55;
+    }
+    .info-banner-icon {
+      flex-shrink: 0;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #3b9edd;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
     /* ── Risky badge ── */
     .risky-badge {
       display: inline-flex;
@@ -166,18 +195,18 @@
       color: #111;
     }
 
-    /* ── Column widths ── */
+    /* ── Column widths — identical across both strategies ── */
     .col-title    { width: 252px; }
-    .col-created  { width: 138px; }
-    .col-updated  { width: 138px; }
+    .col-created  { width: 116px; }
+    .col-updated  { width: 116px; }
     .col-products { width: 88px;  }
     .col-members  { width: 84px;  }
     .col-tags     { width: 156px; }
-    .col-managers { width: auto;  min-width: 160px; }
+    .col-managers { width: 190px; }
 
-    /* ── Date ── */
+    /* ── Date: two-line format (date + smaller time) ── */
     .date-primary   { display: block; color: #111; font-size: 13px; }
-    .date-secondary { display: block; color: #a0aab4; font-size: 11.5px; margin-top: 1px; }
+    .date-secondary { display: block; color: #a0aab4; font-size: 11.5px; margin-top: 2px; }
 
     /* ── Product avatar ── */
     .product-avatar {
@@ -212,7 +241,7 @@
       cursor: default;
     }
 
-    /* ── Manager names ── */
+    /* ── Manager names (S1 — stacked) ── */
     .manager-name {
       color: #1D9E75;
       font-size: 13px;
@@ -220,7 +249,7 @@
       line-height: 1.45;
     }
 
-    /* ── Tooltip anchor — just a transparent wrapper ── */
+    /* ── Tooltip anchor ── */
     [data-tooltip] { cursor: default; }
 
     /* ════════════════════════════════════════
@@ -255,11 +284,7 @@
       color: #1D9E75;
     }
 
-    /* In S2: date + time on same line */
-    .s2 .date-primary   { display: inline; }
-    .s2 .date-secondary { display: inline; margin-left: 4px; margin-top: 0; }
-
-    /* In S2: managers collapsed to one truncated line */
+    /* S2: managers collapsed to one truncated line */
     .manager-inline {
       display: block;
       overflow: hidden;
@@ -272,9 +297,9 @@
 </head>
 <body>
 
-<h1>User Groups Admin — Table Layout Strategies</h1>
+<h1>List items strategy</h1>
 
-<!-- Global tooltip: appended to body, positioned via JS with position:fixed -->
+<!-- Global tooltip: body-level element, positioned via JS with position:fixed -->
 <div id="global-tip"></div>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -283,16 +308,20 @@
 <div class="section">
   <div class="section-header">
     <div class="strategy-label">Strategy 1</div>
-    <h2>Title wraps up to 2 lines — variable row height</h2>
+    <h2>Title wraps up to 2 lines</h2>
     <ul class="spec-list">
       <li>Title column is wider. Text wraps up to 2 lines. Row height adjusts naturally to fit content.</li>
       <li>Titles exceeding 2 lines are truncated with ellipsis and show full text on hover via tooltip.</li>
       <li>Tags column is narrower. Chips truncated at ~18 characters with tooltip on hover showing full label.</li>
-      <li>As an alternative, all rows can have a fixed height slightly taller than the current default, so the layout stays consistent regardless of title length.</li>
+      <li>The date and time are shown on two lines — the date on top, the time below in a smaller, lighter label. This keeps each date column narrower and leaves more horizontal space for the title.</li>
       <li>Variable row height — rows are not uniform in height across the table.
         <span class="risky-badge">⚠ risky</span>
       </li>
     </ul>
+    <div class="info-banner">
+      <span class="info-banner-icon">i</span>
+      <span>As an alternative, all rows can have a fixed height slightly taller than the current default, so the layout stays consistent regardless of title length.</span>
+    </div>
     <div class="risky-explanation">
       <strong>Variable row height risk:</strong> Row heights differ row-by-row depending on title length. This can make the table feel visually uneven and hard to scan at a glance.
     </div>
@@ -347,7 +376,7 @@
           <td><span class="manager-name">Rockeisha Walker</span></td>
         </tr>
 
-        <!-- ② The Learning Tree Academy — medium, fits 1 line, no tooltip needed -->
+        <!-- ② The Learning Tree Academy — medium, fits 1 line -->
         <tr>
           <td>
             <div data-tooltip="The Learning Tree Academy">
@@ -372,7 +401,7 @@
           <td><span class="manager-name">Calandra Robinson</span></td>
         </tr>
 
-        <!-- ③ Franklin Community — wraps to 2 lines, NOT truncated (extra case) -->
+        <!-- ③ Franklin Community — wraps to 2 lines, NOT truncated -->
         <tr>
           <td>
             <div data-tooltip="Franklin Community Learning Center at New Orleans">
@@ -496,6 +525,7 @@
       <li>All rows share a fixed height. No row ever grows taller than this.</li>
       <li>Title column is wider. Text stays on one line. Truncated titles show full text on hover via tooltip.</li>
       <li>Tags column is narrower. Chips truncated at ~18 characters with tooltip on hover showing full label.</li>
+      <li>The date and time are shown on two lines — the date on top, the time below in a smaller, lighter label. This keeps each date column narrower and leaves more horizontal space for the title.</li>
       <li>If the title column is still too narrow, the tooltip becomes the primary reading mechanism for that data.
         <span class="risky-badge">⚠ risky</span>
       </li>
@@ -712,11 +742,6 @@
 (function () {
   var tip = document.getElementById('global-tip');
 
-  /**
-   * Returns true if the element's content is visually truncated:
-   * — Single-line: scrollWidth > clientWidth
-   * — Multi-line clamp (clamp2 class): scrollHeight > clientHeight
-   */
   function isTruncated(el) {
     if (!el) return false;
     if (el.classList.contains('clamp2')) {
@@ -725,35 +750,27 @@
     return el.scrollWidth > el.clientWidth + 1;
   }
 
-  /**
-   * Position the tooltip above (or below if no space) the anchor rect.
-   * Uses position:fixed so it's never clipped by table overflow.
-   */
   function showTip(anchor) {
     var text = anchor.getAttribute('data-tooltip');
     if (!text) return;
 
-    // Find the inner content element to check truncation
     var inner = anchor.querySelector('.cell-title, .tag-chip, .manager-inline');
     if (inner && !isTruncated(inner)) return;
 
     tip.textContent = text;
     tip.style.display = 'block';
-    tip.style.visibility = 'hidden'; // hide while measuring
+    tip.style.visibility = 'hidden';
 
-    var rect    = anchor.getBoundingClientRect();
-    var tw      = tip.offsetWidth;
-    var th      = tip.offsetHeight;
-    var margin  = 8;
+    var rect   = anchor.getBoundingClientRect();
+    var tw     = tip.offsetWidth;
+    var th     = tip.offsetHeight;
+    var margin = 8;
 
     var left = rect.left + rect.width / 2 - tw / 2;
     var top  = rect.top - th - margin;
 
-    // Keep within horizontal viewport bounds
     if (left < margin) left = margin;
     if (left + tw > window.innerWidth - margin) left = window.innerWidth - tw - margin;
-
-    // Flip below if not enough space above
     if (top < margin) top = rect.bottom + margin;
 
     tip.style.left       = left + 'px';
@@ -765,7 +782,6 @@
     tip.style.display = 'none';
   }
 
-  // Attach listeners to every tooltip anchor
   document.querySelectorAll('[data-tooltip]').forEach(function (el) {
     el.addEventListener('mouseenter', function () { showTip(el); });
     el.addEventListener('mouseleave', hideTip);
