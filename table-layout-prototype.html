@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Table Layout Strategies — User Groups Admin</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 13px;
+      color: #111;
+      background: #f5f5f5;
+      padding: 32px 24px 64px;
+    }
+
+    h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 32px;
+    }
+
+    /* ── Section wrapper ── */
+    .section {
+      background: #fff;
+      border: 0.5px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 48px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding: 20px 24px 16px;
+      border-bottom: 0.5px solid #e8e8e8;
+    }
+
+    .strategy-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+      background: #f0f0f0;
+      border-radius: 4px;
+      padding: 2px 8px;
+      margin-bottom: 8px;
+    }
+
+    .section-header h2 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 12px;
+    }
+
+    /* ── Spec list ── */
+    .spec-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .spec-list li {
+      font-size: 12px;
+      color: #555;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      line-height: 1.5;
+    }
+
+    .spec-list li::before {
+      content: "•";
+      color: #bbb;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Risky badge (inline in spec list) ── */
+    .risky-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #92400e;
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-left: 4px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .risky-explanation {
+      font-size: 11px;
+      color: #92400e;
+      background: #fffbeb;
+      border-left: 3px solid #f59e0b;
+      padding: 6px 10px;
+      margin: 8px 0 0 14px;
+      border-radius: 0 4px 4px 0;
+      line-height: 1.5;
+    }
+
+    /* ── Table shared styles ── */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    thead th {
+      padding: 0 12px;
+      height: 36px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+      background: #fafafa;
+      border-bottom: 0.5px solid #e4e4e4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    tbody tr {
+      border-bottom: 0.5px solid #efefef;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fafafa; }
+
+    tbody td {
+      padding: 0 12px;
+      vertical-align: middle;
+      color: #111;
+      font-size: 13px;
+    }
+
+    /* ── Column widths (shared) ── */
+    .col-title    { width: 260px; }
+    .col-created  { width: 148px; }
+    .col-updated  { width: 148px; }
+    .col-products { width: 96px;  }
+    .col-members  { width: 88px;  }
+    .col-tags     { width: 160px; }
+    .col-managers { width: auto;  min-width: 160px; }
+
+    /* ── Date / secondary text ── */
+    .date-primary   { color: #111; }
+    .date-secondary { color: #888; font-size: 12px; display: block; margin-top: 1px; }
+
+    /* ── Product avatar ── */
+    .product-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #1D9E75;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Members ── */
+    .members-text { color: #111; }
+
+    /* ── Tag chip ── */
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      max-width: 100%;
+      height: 22px;
+      border: 1px solid #dde;
+      border-radius: 999px;
+      padding: 0 8px;
+      font-size: 11px;
+      color: #444;
+      background: #fff;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    /* ── Manager name ── */
+    .manager-name {
+      color: #1D9E75;
+      font-size: 13px;
+    }
+    .manager-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    /* ── Custom tooltip ── */
+    .has-tooltip {
+      position: relative;
+    }
+
+    .has-tooltip .tooltip {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 11px;
+      line-height: 1.4;
+      padding: 5px 9px;
+      border-radius: 5px;
+      white-space: nowrap;
+      max-width: 280px;
+      white-space: normal;
+      word-break: break-word;
+      text-align: center;
+      z-index: 100;
+      pointer-events: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+
+    .has-tooltip .tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: #1a1a1a;
+    }
+
+    .has-tooltip:hover .tooltip {
+      display: block;
+    }
+
+    /* ── Tag cell tooltip anchored to chip ── */
+    .tag-cell {
+      overflow: hidden;
+    }
+
+    /* ─────────────────────────────────────────
+       STRATEGY 1 — Title wraps up to 2 lines
+    ───────────────────────────────────────── */
+
+    .s1 tbody td {
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    /* Title: wraps up to 2 lines */
+    .s1 .cell-title {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.45;
+      color: #1D9E75;
+      cursor: default;
+    }
+
+    /* ─────────────────────────────────────────
+       STRATEGY 2 — Fixed 42px rows, single line
+    ───────────────────────────────────────── */
+
+    .s2 tbody tr { height: 42px; }
+
+    .s2 tbody td {
+      height: 42px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    /* Title: single line, truncate */
+    .s2 .cell-title {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: #1D9E75;
+      cursor: default;
+      display: block;
+    }
+
+    /* In fixed-height rows, manager list becomes a single truncated line */
+    .s2 .manager-list {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      display: block;
+    }
+
+    .s2 .manager-name {
+      display: inline;
+    }
+
+    .s2 .manager-sep {
+      color: #888;
+      font-size: 11px;
+      margin: 0 3px;
+    }
+
+    /* Product cell in fixed height */
+    .s2 td.col-products {
+      overflow: visible; /* let avatar show */
+    }
+  </style>
+</head>
+<body>
+
+<h1>User Groups Admin — Table Layout Prototype</h1>
+
+<!-- ══════════════════════════════════════════════════════════
+     STRATEGY 1
+══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="strategy-label">Strategy 1</div>
+    <h2>Title wraps up to 2 lines — variable row height</h2>
+    <ul class="spec-list">
+      <li>Title column is wider; text wraps to a maximum of 2 lines. Row height expands naturally to fit content.</li>
+      <li>Titles exceeding 2 lines are truncated with ellipsis; full text appears via custom tooltip on hover.</li>
+      <li>Tags column is narrower. Chips are truncated at ~18 characters; full label shown in tooltip on hover.</li>
+      <li>
+        Variable row height — rows are not the same height across the table.
+        <span class="risky-badge">⚠ risky</span>
+      </li>
+    </ul>
+    <div class="risky-explanation">
+      <strong>Variable row height risk:</strong> Row heights differ row-by-row depending on title length. This can make the table feel visually uneven and complicates virtual-scroll / fixed-header implementations. Skeleton loading states and row striping also become harder to maintain consistently.
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="s1">
+      <colgroup>
+        <col class="col-title" />
+        <col class="col-created" />
+        <col class="col-updated" />
+        <col class="col-products" />
+        <col class="col-members" />
+        <col class="col-tags" />
+        <col class="col-managers" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Created</th>
+          <th>Updated</th>
+          <th>Products</th>
+          <th>Members</th>
+          <th>Tags</th>
+          <th>Group managers</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- Row 1: Bright Star -->
+        <tr>
+          <td>
+            <div class="has-tooltip">
+              <span class="cell-title">Bright Star</span>
+              <span class="tooltip">Bright Star</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">13 Nov 2025</span>
+            <span class="date-secondary">11:11</span>
+          </td>
+          <td>
+            <span class="date-primary">13 Nov 2025</span>
+            <span class="date-secondary">11:11</span>
+          </td>
+          <td>
+            <div class="has-tooltip" style="display:inline-block;">
+              <div class="product-avatar">P</div>
+              <span class="tooltip">1 product</span>
+            </div>
+          </td>
+          <td><span class="members-text">8 / 30</span></td>
+          <td class="tag-cell">
+            <div class="has-tooltip" style="display:inline-flex; max-width:100%;">
+              <span class="tag-chip">Bright Star</span>
+              <span class="tooltip">Bright Star</span>
+            </div>
+          </td>
+          <td>
+            <div class="manager-list">
+              <span class="manager-name">Rockeisha Walker</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Row 2: The Learning Tree Academy -->
+        <tr>
+          <td>
+            <div class="has-tooltip">
+              <span class="cell-title">The Learning Tree Academy</span>
+              <span class="tooltip">The Learning Tree Academy</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">06 Nov 2025</span>
+            <span class="date-secondary">11:21</span>
+          </td>
+          <td>
+            <span class="date-primary">06 Nov 2025</span>
+            <span class="date-secondary">11:21</span>
+          </td>
+          <td>
+            <div class="has-tooltip" style="display:inline-block;">
+              <div class="product-avatar">P</div>
+              <span class="tooltip">1 product</span>
+            </div>
+          </td>
+          <td><span class="members-text">9 / 30</span></td>
+          <td class="tag-cell">
+            <div class="has-tooltip" style="display:inline-flex; max-width:100%;">
+              <span class="tag-chip">The Learning Tree…</span>
+              <span class="tooltip">The Learning Tree Academy</span>
+            </div>
+          </td>
+          <td>
+            <div class="manager-list">
+              <span class="manager-name">Calandra Robinson</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Row 3: Kids of Excellence -->
+        <tr>
+          <td>
+            <div class="has-tooltip">
+              <span class="cell-title">Kids of Excellence - St. Claude</span>
+              <span class="tooltip">Kids of Excellence - St. Claude</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">23 Sep 2025</span>
+            <span class="date-secondary">20:33</span>
+          </td>
+          <td>
+            <span class="date-primary">23 Sep 2025</span>
+            <span class="date-secondary">20:33</span>
+          </td>
+          <td>
+            <div class="has-tooltip" style="display:inline-block;">
+              <div class="product-avatar">P</div>
+              <span class="tooltip">1 product</span>
+            </div>
+          </td>
+          <td><span class="members-text">13 / 30</span></td>
+          <td class="tag-cell">
+            <div class="has-tooltip" style="display:inline-flex; max-width:100%;">
+              <span class="tag-chip">Kids of Excellence…</span>
+              <span class="tooltip">Kids of Excellence - St. Claude</span>
+            </div>
+          </td>
+          <td>
+            <div class="manager-list">
+              <span class="manager-name">Taneka Reddick</span>
+              <span class="manager-name">Martha Johnson</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Row 4: Royal Castle (long title — triggers 2-line clamp) -->
+        <tr>
+          <td>
+            <div class="has-tooltip">
+              <span class="cell-title">Royal Castle Child Development Center Extended Edition for Regional Campuses</span>
+              <span class="tooltip">Royal Castle Child Development Center Extended Edition for Regional Campuses</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">23 Sep 2025</span>
+            <span class="date-secondary">19:05</span>
+          </td>
+          <td>
+            <span class="date-primary">23 Sep 2025</span>
+            <span class="date-secondary">19:05</span>
+          </td>
+          <td>
+            <div class="has-tooltip" style="display:inline-block;">
+              <div class="product-avatar">P</div>
+              <span class="tooltip">1 product</span>
+            </div>
+          </td>
+          <td><span class="members-text">1 / 30</span></td>
+          <td class="tag-cell">
+            <div class="has-tooltip" style="display:inline-flex; max-width:100%;">
+              <span class="tag-chip">Royal Castle Child…</span>
+              <span class="tooltip">Royal Castle Child Development Center</span>
+            </div>
+          </td>
+          <td>
+            <div class="manager-list">
+              <span class="manager-name">Pearlie Harris</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Row 5: Carlie Care Kids Academy -->
+        <tr>
+          <td>
+            <div class="has-tooltip">
+              <span class="cell-title">Carlie Care Kids Academy</span>
+              <span class="tooltip">Carlie Care Kids Academy</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">19 Sep 2025</span>
+            <span class="date-secondary">17:32</span>
+          </td>
+          <td>
+            <span class="date-primary">18 Feb 2026</span>
+            <span class="date-secondary">11:48</span>
+          </td>
+          <td>
+            <div class="has-tooltip" style="display:inline-block;">
+              <div class="product-avatar">P</div>
+              <span class="tooltip">1 product</span>
+            </div>
+          </td>
+          <td><span class="members-text">37 / 40</span></td>
+          <td class="tag-cell">
+            <div class="has-tooltip" style="display:inline-flex; max-width:100%;">
+              <span class="tag-chip">Carlie Care Kids…</span>
+              <span class="tooltip">Carlie Care Kids Academy</span>
+            </div>
+          </td>
+          <td>
+            <div class="manager-list">
+              <span class="manager-name">Monique Rouege</span>
+              <span class="manager-name">Tramaine Fountain</span>
+              <span class="manager-name">Lajuanda Lewis</span>
+            </div>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div><!-- /section s1 -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     STRATEGY 2
+══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="strategy-label">Strategy 2</div>
+    <h2>Fixed row height (42 px) — single-line title</h2>
+    <ul class="spec-list">
+      <li>All rows share a fixed height of 42 px. No row ever grows taller than this.</li>
+      <li>Title column is wider; text is constrained to a single line and truncated with ellipsis. Full text shown in tooltip on hover.</li>
+      <li>Tags column is narrower. Chips are truncated at ~18 characters; full label shown in tooltip on hover.</li>
+      <li>
+        If the title column is still too narrow for long names, the tooltip becomes the <em>primary reading mechanism</em> for that data.
+        <span class="risky-badge">⚠ risky</span>
+      </li>
+    </ul>
+    <div class="risky-explanation">
+      <strong>Tooltip-as-primary-reading risk:</strong> When many titles are truncated, users must hover each row to understand what they're looking at. This is especially painful on touch devices (no hover state), and reduces scannability for power users managing many groups. Consider increasing the column's minimum width or surfacing title in a secondary label.
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="s2">
+      <colgroup>
+        <col class="col-title" />
+        <col class="col-created" />
+        <col class="col-updated" />
+        <col class="col-products" />
+        <col class="col-members" />
+        <col class="col-tags" />
+        <col class="col-managers" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Created</th>
+          <th>Updated</th>
+          <th>Products</th>
+          <th>Members</th>
+          <th>Tags</th>
+          <th>Group managers</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- Row 1: Bright Star -->
+        <tr>
+          <td>
+            <div class="has-tooltip">
+              <span class="cell-title">Bright Star</span>
+              <span class="tooltip">Bright Star</span>
+            </div>
+          </td>
+          <td><span class="date-primary">13 Nov 2025 11:11</span></td>
+          <td><span class="date-primary">13 Nov 2025 11:11</span></td>
+          <td>
+            <div class="has-tooltip" style="display:inline-block;">
+              <div class="product-avatar">P</div>
+              <span class="tooltip">1 product</span>
+            </div>
+          </td>
+          <td><span class="members-text">8 / 30</span></td>
+          <td class="tag-cell">
+            <div class="has-tooltip" style="display:inline-flex; max-width:100%;">
+              <span class="tag-chip">Bright Star</span>
+              <span class="tooltip">Bright Star</span>
+            </div>
+          </td>
+          <td>
+            <div class="has-tooltip">
+              <span class="manager-list">
+                <span class="manager-name">Rockeisha Walker</span>
+              </span>
+              <span class="tooltip">Rockeisha Walker</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Row 2: The Learning Tree Academy -->
+        <tr>
+          <td>
+            <div class="has-tooltip">
+              <span class="cell-title">The Learning Tree Academy</span>
+              <span class="tooltip">The Learning Tree Academy</span>
+            </div>
+          </td>
+          <td><span class="date-primary">06 Nov 2025 11:21</span></td>
+          <td><span class="date-primary">06 Nov 2025 11:21</span></td>
+          <td>
+            <div class="has-tooltip" style="display:inline-block;">
+              <div class="product-avatar">P</div>
+              <span class="tooltip">1 product</span>
+            </div>
+          </td>
+          <td><span class="members-text">9 / 30</span></td>
+          <td class="tag-cell">
+            <div class="has-tooltip" style="display:inline-flex; max-width:100%;">
+              <span class="tag-chip">The Learning Tree…</span>
+              <span class="tooltip">The Learning Tree Academy</span>
+            </div>
+          </td>
+          <td>
+            <div class="has-tooltip">
+              <span class="manager-list">
+                <span class="manager-name">Calandra Robinson</span>
+              </span>
+              <span class="tooltip">Calandra Robinson</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Row 3: Kids of Excellence -->
+        <tr>
+          <td>
+            <div class="has-tooltip">
+              <span class="cell-title">Kids of Excellence - St. Claude</span>
+              <span class="tooltip">Kids of Excellence - St. Claude</span>
+            </div>
+          </td>
+          <td><span class="date-primary">23 Sep 2025 20:33</span></td>
+          <td><span class="date-primary">23 Sep 2025 20:33</span></td>
+          <td>
+            <div class="has-tooltip" style="display:inline-block;">
+              <div class="product-avatar">P</div>
+              <span class="tooltip">1 product</span>
+            </div>
+          </td>
+          <td><span class="members-text">13 / 30</span></td>
+          <td class="tag-cell">
+            <div class="has-tooltip" style="display:inline-flex; max-width:100%;">
+              <span class="tag-chip">Kids of Excellence…</span>
+              <span class="tooltip">Kids of Excellence - St. Claude</span>
+            </div>
+          </td>
+          <td>
+            <div class="has-tooltip">
+              <span class="manager-list">
+                <span class="manager-name">Taneka Reddick</span><span class="manager-sep">,</span>
+                <span class="manager-name"> Martha Johnson</span>
+              </span>
+              <span class="tooltip">Taneka Reddick, Martha Johnson</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Row 4: Royal Castle (long title — truncated to 1 line) -->
+        <tr>
+          <td>
+            <div class="has-tooltip">
+              <span class="cell-title">Royal Castle Child Development Center Extended Edition for Regional Campuses</span>
+              <span class="tooltip">Royal Castle Child Development Center Extended Edition for Regional Campuses</span>
+            </div>
+          </td>
+          <td><span class="date-primary">23 Sep 2025 19:05</span></td>
+          <td><span class="date-primary">23 Sep 2025 19:05</span></td>
+          <td>
+            <div class="has-tooltip" style="display:inline-block;">
+              <div class="product-avatar">P</div>
+              <span class="tooltip">1 product</span>
+            </div>
+          </td>
+          <td><span class="members-text">1 / 30</span></td>
+          <td class="tag-cell">
+            <div class="has-tooltip" style="display:inline-flex; max-width:100%;">
+              <span class="tag-chip">Royal Castle Child…</span>
+              <span class="tooltip">Royal Castle Child Development Center</span>
+            </div>
+          </td>
+          <td>
+            <div class="has-tooltip">
+              <span class="manager-list">
+                <span class="manager-name">Pearlie Harris</span>
+              </span>
+              <span class="tooltip">Pearlie Harris</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Row 5: Carlie Care Kids Academy -->
+        <tr>
+          <td>
+            <div class="has-tooltip">
+              <span class="cell-title">Carlie Care Kids Academy</span>
+              <span class="tooltip">Carlie Care Kids Academy</span>
+            </div>
+          </td>
+          <td><span class="date-primary">19 Sep 2025 17:32</span></td>
+          <td><span class="date-primary">18 Feb 2026 11:48</span></td>
+          <td>
+            <div class="has-tooltip" style="display:inline-block;">
+              <div class="product-avatar">P</div>
+              <span class="tooltip">1 product</span>
+            </div>
+          </td>
+          <td><span class="members-text">37 / 40</span></td>
+          <td class="tag-cell">
+            <div class="has-tooltip" style="display:inline-flex; max-width:100%;">
+              <span class="tag-chip">Carlie Care Kids…</span>
+              <span class="tooltip">Carlie Care Kids Academy</span>
+            </div>
+          </td>
+          <td>
+            <div class="has-tooltip">
+              <span class="manager-list">
+                <span class="manager-name">Monique Rouege</span><span class="manager-sep">,</span>
+                <span class="manager-name"> Tramaine Fountain</span><span class="manager-sep">,</span>
+                <span class="manager-name"> Lajuanda Lewis</span>
+              </span>
+              <span class="tooltip">Monique Rouege, Tramaine Fountain, Lajuanda Lewis</span>
+            </div>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div><!-- /section s2 -->
+
+</body>
+</html>
