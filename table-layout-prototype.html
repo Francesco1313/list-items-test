@@ -249,6 +249,46 @@
       line-height: 1.45;
     }
 
+    /* ── Manager overflow expand ── */
+    .manager-overflow { display: none; }
+    .manager-overflow.visible { display: block; }
+
+    .manager-expand-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 4px;
+      height: 20px;
+      padding: 0 8px;
+      border: 0.5px solid #d4d8de;
+      border-radius: 4px;
+      background: #f5f6f7;
+      color: #888;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .manager-expand-btn:hover { background: #eceef0; color: #555; }
+
+    /* ── NEW badge ── */
+    .new-badge {
+      display: inline-flex;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #065f46;
+      background: #d1fae5;
+      border: 1px solid #6ee7b7;
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-left: 5px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
     /* ── Tooltip anchor ── */
     [data-tooltip] { cursor: default; }
 
@@ -310,20 +350,18 @@
     <div class="strategy-label">Strategy 1</div>
     <h2>Title wraps up to 2 lines</h2>
     <ul class="spec-list">
-      <li>Title column is wider. Text wraps up to 2 lines. Row height adjusts naturally to fit content.</li>
+      <li>Title column is wider. Text wraps up to 2 lines.</li>
       <li>Titles exceeding 2 lines are truncated with ellipsis and show full text on hover via tooltip.</li>
       <li>Tags column is narrower. Chips truncated at ~18 characters with tooltip on hover showing full label.</li>
       <li>The date and time are shown on two lines — the date on top, the time below in a smaller, lighter label. This keeps each date column narrower and leaves more horizontal space for the title.</li>
+      <li>Row height is determined by the number of group managers. All managers are listed and the row grows to fit them.</li>
+      <li>If a group has more than 4 managers, only the first 4 are shown. A … icon appears below; clicking it expands the row to reveal all managers. <span class="new-badge">new</span></li>
       <li>Variable row height — rows are not uniform in height across the table.
         <span class="risky-badge">⚠ risky</span>
       </li>
     </ul>
-    <div class="info-banner">
-      <span class="info-banner-icon">i</span>
-      <span>As an alternative, all rows can have a fixed height slightly taller than the current default, so the layout stays consistent. In this case, if a group has more than 2–3 managers (TBD), only the first ones are shown followed by a … icon; clicking it expands the row to reveal all managers.</span>
-    </div>
     <div class="risky-explanation">
-      <strong>Variable row height risk:</strong> Row heights differ row-by-row depending on title length. This can make the table feel visually uneven and hard to scan at a glance.
+      <strong>Variable row height risk:</strong> Row heights differ row-by-row depending on the number of managers. This can make the table feel visually uneven and hard to scan at a glance.
     </div>
   </div>
 
@@ -476,7 +514,17 @@
               <span class="tag-chip">Royal Castle Child Development Center</span>
             </div>
           </td>
-          <td><span class="manager-name">Pearlie Harris</span></td>
+          <td>
+            <span class="manager-name">Pearlie Harris</span>
+            <span class="manager-name">Marcus Thompson</span>
+            <span class="manager-name">Linda Chen</span>
+            <span class="manager-name">Robert Davis</span>
+            <div class="manager-overflow">
+              <span class="manager-name">Sarah Williams</span>
+              <span class="manager-name">James Brown</span>
+            </div>
+            <button class="manager-expand-btn">···</button>
+          </td>
         </tr>
 
         <!-- ⑥ Carlie Care Kids Academy -->
@@ -785,6 +833,15 @@
   document.querySelectorAll('[data-tooltip]').forEach(function (el) {
     el.addEventListener('mouseenter', function () { showTip(el); });
     el.addEventListener('mouseleave', hideTip);
+  });
+
+  // Manager expand/collapse
+  document.querySelectorAll('.manager-expand-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var overflow = btn.previousElementSibling;
+      var expanded = overflow.classList.toggle('visible');
+      btn.textContent = expanded ? '↑' : '···';
+    });
   });
 })();
 </script>
