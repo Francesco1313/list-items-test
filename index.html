@@ -371,6 +371,78 @@
       white-space: nowrap;
     }
     .mgr-dd-item:hover { background: #f5faf8; }
+
+    /* ════════════════════════════════════════
+       STRATEGY 1 ALT — Fixed default height, max 2 managers
+    ════════════════════════════════════════ */
+
+    .s1alt tbody td { padding-top: 12px; padding-bottom: 12px; }
+
+    .s1alt .cell-title {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.5;
+      font-weight: 600;
+      color: #1D9E75;
+    }
+
+    /* ════════════════════════════════════════
+       STRATEGY 3 — Manager avatar bubbles
+    ════════════════════════════════════════ */
+
+    .s3 tbody td { padding-top: 12px; padding-bottom: 12px; }
+
+    .s3 .cell-title {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.5;
+      font-weight: 600;
+      color: #1D9E75;
+    }
+
+    .mgr-bubble-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .mgr-bubble {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #1D9E75;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .mgr-bubble:hover { background: #17835f; }
+
+    .mgr-bubble-more {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #e8f5f0;
+      color: #1D9E75;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      border: 1px solid #b2ddd1;
+    }
+    .mgr-bubble-more:hover { background: #d0ede6; }
   </style>
 </head>
 <body>
@@ -400,10 +472,6 @@
     </ul>
     <div class="risky-explanation">
       <strong>Variable row height risk:</strong> Row heights differ row-by-row depending on the number of managers. This can make the table feel visually uneven and hard to scan at a glance.
-    </div>
-    <div class="info-banner">
-      <span class="info-banner-icon">i</span>
-      <span><strong>Alternative:</strong> all rows have a default fixed height. Titles are displayed on up to two lines, and up to 2 managers are shown by default. If a group has more than 2 managers, only the first 2 are shown. A … icon appears below; clicking it expands the row to reveal all managers.</span>
     </div>
   </div>
 
@@ -602,6 +670,223 @@
     </table>
   </div>
 </div><!-- /Strategy 1 -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     STRATEGY 1 — ALTERNATIVE: Fixed default height, max 2 managers
+════════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="strategy-label">Strategy 1 — Alternative</div>
+    <h2>Fixed default row height — max 2 managers</h2>
+    <ul class="spec-list">
+      <li>Title column is wider. Text wraps up to 2 lines.</li>
+      <li>Titles exceeding 2 lines are truncated with ellipsis and show full text on hover via tooltip.</li>
+      <li>Tags column is narrower. Chips truncated at ~18 characters with tooltip on hover showing full label.</li>
+      <li>The date and time are shown on two lines — the date on top, the time below in a smaller, lighter label.</li>
+      <li>All rows have a default fixed height. Up to 2 managers are shown by default.</li>
+      <li>If a group has more than 2 managers, only the first 2 are shown. A … icon appears below; clicking it expands the row to reveal all managers.</li>
+    </ul>
+  </div>
+
+  <div class="table-wrap">
+    <table class="s1alt">
+      <colgroup>
+        <col class="col-title" />
+        <col class="col-created" />
+        <col class="col-updated" />
+        <col class="col-products" />
+        <col class="col-members" />
+        <col class="col-tags" />
+        <col class="col-managers" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Created</th>
+          <th>Updated</th>
+          <th>Products</th>
+          <th>Members</th>
+          <th>Tags</th>
+          <th>Group managers</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- ① Bright Star -->
+        <tr>
+          <td>
+            <div data-tooltip="Bright Star">
+              <span class="cell-title clamp2">Bright Star</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">13 Nov 2025</span>
+            <span class="date-secondary">11:11</span>
+          </td>
+          <td>
+            <span class="date-primary">13 Nov 2025</span>
+            <span class="date-secondary">11:11</span>
+          </td>
+          <td><div class="product-avatar">P</div></td>
+          <td>8 / 30</td>
+          <td>
+            <div data-tooltip="Bright Star">
+              <span class="tag-chip">Bright Star</span>
+            </div>
+          </td>
+          <td><span class="manager-name">Rockeisha Walker</span></td>
+        </tr>
+
+        <!-- ② The Learning Tree Academy -->
+        <tr>
+          <td>
+            <div data-tooltip="The Learning Tree Academy">
+              <span class="cell-title clamp2">The Learning Tree Academy</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">06 Nov 2025</span>
+            <span class="date-secondary">11:21</span>
+          </td>
+          <td>
+            <span class="date-primary">06 Nov 2025</span>
+            <span class="date-secondary">11:21</span>
+          </td>
+          <td><div class="product-avatar">P</div></td>
+          <td>9 / 30</td>
+          <td>
+            <div data-tooltip="The Learning Tree Academy">
+              <span class="tag-chip">The Learning Tree Academy</span>
+            </div>
+          </td>
+          <td><span class="manager-name">Calandra Robinson</span></td>
+        </tr>
+
+        <!-- ③ Franklin Community -->
+        <tr>
+          <td>
+            <div data-tooltip="Franklin Community Learning Center at New Orleans">
+              <span class="cell-title clamp2">Franklin Community Learning Center at New Orleans</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">01 Oct 2025</span>
+            <span class="date-secondary">09:00</span>
+          </td>
+          <td>
+            <span class="date-primary">01 Oct 2025</span>
+            <span class="date-secondary">09:00</span>
+          </td>
+          <td><div class="product-avatar">P</div></td>
+          <td>15 / 30</td>
+          <td>
+            <div data-tooltip="Franklin Community Learning Center">
+              <span class="tag-chip">Franklin Community Learning Center</span>
+            </div>
+          </td>
+          <td><span class="manager-name">Dionne Phillips</span></td>
+        </tr>
+
+        <!-- ④ Kids of Excellence — 2 managers, no expand needed -->
+        <tr>
+          <td>
+            <div data-tooltip="Kids of Excellence - St. Claude Community Center">
+              <span class="cell-title clamp2">Kids of Excellence - St. Claude Community Center</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">23 Sep 2025</span>
+            <span class="date-secondary">20:33</span>
+          </td>
+          <td>
+            <span class="date-primary">23 Sep 2025</span>
+            <span class="date-secondary">20:33</span>
+          </td>
+          <td><div class="product-avatar">P</div></td>
+          <td>13 / 30</td>
+          <td>
+            <div data-tooltip="Kids of Excellence - St. Claude">
+              <span class="tag-chip">Kids of Excellence - St. Claude</span>
+            </div>
+          </td>
+          <td>
+            <span class="manager-name">Taneka Reddick</span>
+            <span class="manager-name">Martha Johnson</span>
+          </td>
+        </tr>
+
+        <!-- ⑤ Royal Castle — 6 managers, show 2 + expand -->
+        <tr>
+          <td>
+            <div data-tooltip="Royal Castle Child Development Center Extended Edition for Regional Campuses">
+              <span class="cell-title clamp2">Royal Castle Child Development Center Extended Edition for Regional Campuses</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">23 Sep 2025</span>
+            <span class="date-secondary">19:05</span>
+          </td>
+          <td>
+            <span class="date-primary">23 Sep 2025</span>
+            <span class="date-secondary">19:05</span>
+          </td>
+          <td><div class="product-avatar">P</div></td>
+          <td>1 / 30</td>
+          <td>
+            <div data-tooltip="Royal Castle Child Development Center">
+              <span class="tag-chip">Royal Castle Child Development Center</span>
+            </div>
+          </td>
+          <td>
+            <span class="manager-name">Pearlie Harris</span>
+            <span class="manager-name">Marcus Thompson</span>
+            <div class="manager-overflow">
+              <span class="manager-name">Linda Chen</span>
+              <span class="manager-name">Robert Davis</span>
+              <span class="manager-name">Sarah Williams</span>
+              <span class="manager-name">James Brown</span>
+            </div>
+            <button class="manager-expand-btn">···</button>
+          </td>
+        </tr>
+
+        <!-- ⑥ Carlie Care Kids Academy — 3 managers, show 2 + expand -->
+        <tr>
+          <td>
+            <div data-tooltip="Carlie Care Kids Academy">
+              <span class="cell-title clamp2">Carlie Care Kids Academy</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">19 Sep 2025</span>
+            <span class="date-secondary">17:32</span>
+          </td>
+          <td>
+            <span class="date-primary">18 Feb 2026</span>
+            <span class="date-secondary">11:48</span>
+          </td>
+          <td><div class="product-avatar">P</div></td>
+          <td>37 / 40</td>
+          <td>
+            <div data-tooltip="Carlie Care Kids Academy">
+              <span class="tag-chip">Carlie Care Kids Academy</span>
+            </div>
+          </td>
+          <td>
+            <span class="manager-name">Monique Rouege</span>
+            <span class="manager-name">Tramaine Fountain</span>
+            <div class="manager-overflow">
+              <span class="manager-name">Lajuanda Lewis</span>
+            </div>
+            <button class="manager-expand-btn">···</button>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div><!-- /Strategy 1 Alternative -->
 
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -804,6 +1089,272 @@
   </div>
 </div><!-- /Strategy 2 -->
 
+
+<!-- ═══════════════════════════════════════════════════════════════
+     STRATEGY 3 — Manager avatar bubbles
+════════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="strategy-label">Strategy 3</div>
+    <h2>Manager avatar bubbles</h2>
+    <ul class="spec-list">
+      <li>Title column is wider. Text wraps up to 2 lines.</li>
+      <li>Titles exceeding 2 lines are truncated with ellipsis and show full text on hover via tooltip.</li>
+      <li>Tags column is narrower. Chips truncated at ~18 characters with tooltip on hover showing full label.</li>
+      <li>The date and time are shown on two lines — the date on top, the time below in a smaller, lighter label.</li>
+      <li>Group managers are shown as circular avatar bubbles (initial letter, green background). Hovering a bubble shows the manager's full name via tooltip.</li>
+      <li>Clicking the manager cell opens a dropdown listing all managers.</li>
+      <li>If a group has more than 3 managers, only 3 bubbles are shown and a "+N" overflow badge appears.</li>
+      <li>With many managers, bubbles may overflow or wrap the cell unpredictably.
+        <span class="risky-badge">⚠ risky</span>
+      </li>
+      <li>Requires a new circular avatar bubble component not currently in the design system.
+        <span class="risky-badge">⚠ risky</span>
+      </li>
+    </ul>
+    <div class="risky-explanation">
+      <strong>Scalability risk:</strong> If a group has many managers, the bubble row overflows or wraps, making the cell taller and less predictable across rows.
+    </div>
+    <div class="risky-explanation">
+      <strong>New component risk:</strong> This pattern requires a new circular avatar bubble component that does not currently exist in the design system. This adds implementation effort and design review overhead.
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="s3">
+      <colgroup>
+        <col class="col-title" />
+        <col class="col-created" />
+        <col class="col-updated" />
+        <col class="col-products" />
+        <col class="col-members" />
+        <col class="col-tags" />
+        <col class="col-managers" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Created</th>
+          <th>Updated</th>
+          <th>Products</th>
+          <th>Members</th>
+          <th>Tags</th>
+          <th>Group managers</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- ① Bright Star — 1 manager -->
+        <tr>
+          <td>
+            <div data-tooltip="Bright Star">
+              <span class="cell-title clamp2">Bright Star</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">13 Nov 2025</span>
+            <span class="date-secondary">11:11</span>
+          </td>
+          <td>
+            <span class="date-primary">13 Nov 2025</span>
+            <span class="date-secondary">11:11</span>
+          </td>
+          <td><div class="product-avatar">P</div></td>
+          <td>8 / 30</td>
+          <td>
+            <div data-tooltip="Bright Star">
+              <span class="tag-chip">Bright Star</span>
+            </div>
+          </td>
+          <td>
+            <div class="mgr-bubble-group">
+              <span class="mgr-bubble" data-tooltip="Rockeisha Walker">R</span>
+            </div>
+            <div class="mgr-dd-panel">
+              <span class="mgr-dd-item">Rockeisha Walker</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- ② The Learning Tree Academy — 1 manager -->
+        <tr>
+          <td>
+            <div data-tooltip="The Learning Tree Academy">
+              <span class="cell-title clamp2">The Learning Tree Academy</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">06 Nov 2025</span>
+            <span class="date-secondary">11:21</span>
+          </td>
+          <td>
+            <span class="date-primary">06 Nov 2025</span>
+            <span class="date-secondary">11:21</span>
+          </td>
+          <td><div class="product-avatar">P</div></td>
+          <td>9 / 30</td>
+          <td>
+            <div data-tooltip="The Learning Tree Academy">
+              <span class="tag-chip">The Learning Tree Academy</span>
+            </div>
+          </td>
+          <td>
+            <div class="mgr-bubble-group">
+              <span class="mgr-bubble" data-tooltip="Calandra Robinson">C</span>
+            </div>
+            <div class="mgr-dd-panel">
+              <span class="mgr-dd-item">Calandra Robinson</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- ③ Franklin Community — 1 manager -->
+        <tr>
+          <td>
+            <div data-tooltip="Franklin Community Learning Center at New Orleans">
+              <span class="cell-title clamp2">Franklin Community Learning Center at New Orleans</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">01 Oct 2025</span>
+            <span class="date-secondary">09:00</span>
+          </td>
+          <td>
+            <span class="date-primary">01 Oct 2025</span>
+            <span class="date-secondary">09:00</span>
+          </td>
+          <td><div class="product-avatar">P</div></td>
+          <td>15 / 30</td>
+          <td>
+            <div data-tooltip="Franklin Community Learning Center">
+              <span class="tag-chip">Franklin Community Learning Center</span>
+            </div>
+          </td>
+          <td>
+            <div class="mgr-bubble-group">
+              <span class="mgr-bubble" data-tooltip="Dionne Phillips">D</span>
+            </div>
+            <div class="mgr-dd-panel">
+              <span class="mgr-dd-item">Dionne Phillips</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- ④ Kids of Excellence — 2 managers -->
+        <tr>
+          <td>
+            <div data-tooltip="Kids of Excellence - St. Claude Community Center">
+              <span class="cell-title clamp2">Kids of Excellence - St. Claude Community Center</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">23 Sep 2025</span>
+            <span class="date-secondary">20:33</span>
+          </td>
+          <td>
+            <span class="date-primary">23 Sep 2025</span>
+            <span class="date-secondary">20:33</span>
+          </td>
+          <td><div class="product-avatar">P</div></td>
+          <td>13 / 30</td>
+          <td>
+            <div data-tooltip="Kids of Excellence - St. Claude">
+              <span class="tag-chip">Kids of Excellence - St. Claude</span>
+            </div>
+          </td>
+          <td>
+            <div class="mgr-bubble-group">
+              <span class="mgr-bubble" data-tooltip="Taneka Reddick">T</span>
+              <span class="mgr-bubble" data-tooltip="Martha Johnson">M</span>
+            </div>
+            <div class="mgr-dd-panel">
+              <span class="mgr-dd-item">Taneka Reddick</span>
+              <span class="mgr-dd-item">Martha Johnson</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- ⑤ Royal Castle — 6 managers, 3 bubbles + +3 overflow -->
+        <tr>
+          <td>
+            <div data-tooltip="Royal Castle Child Development Center Extended Edition for Regional Campuses">
+              <span class="cell-title clamp2">Royal Castle Child Development Center Extended Edition for Regional Campuses</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">23 Sep 2025</span>
+            <span class="date-secondary">19:05</span>
+          </td>
+          <td>
+            <span class="date-primary">23 Sep 2025</span>
+            <span class="date-secondary">19:05</span>
+          </td>
+          <td><div class="product-avatar">P</div></td>
+          <td>1 / 30</td>
+          <td>
+            <div data-tooltip="Royal Castle Child Development Center">
+              <span class="tag-chip">Royal Castle Child Development Center</span>
+            </div>
+          </td>
+          <td>
+            <div class="mgr-bubble-group">
+              <span class="mgr-bubble" data-tooltip="Pearlie Harris">P</span>
+              <span class="mgr-bubble" data-tooltip="Marcus Thompson">M</span>
+              <span class="mgr-bubble" data-tooltip="Linda Chen">L</span>
+              <span class="mgr-bubble-more">+3</span>
+            </div>
+            <div class="mgr-dd-panel">
+              <span class="mgr-dd-item">Pearlie Harris</span>
+              <span class="mgr-dd-item">Marcus Thompson</span>
+              <span class="mgr-dd-item">Linda Chen</span>
+              <span class="mgr-dd-item">Robert Davis</span>
+              <span class="mgr-dd-item">Sarah Williams</span>
+              <span class="mgr-dd-item">James Brown</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- ⑥ Carlie Care Kids Academy — 3 managers -->
+        <tr>
+          <td>
+            <div data-tooltip="Carlie Care Kids Academy">
+              <span class="cell-title clamp2">Carlie Care Kids Academy</span>
+            </div>
+          </td>
+          <td>
+            <span class="date-primary">19 Sep 2025</span>
+            <span class="date-secondary">17:32</span>
+          </td>
+          <td>
+            <span class="date-primary">18 Feb 2026</span>
+            <span class="date-secondary">11:48</span>
+          </td>
+          <td><div class="product-avatar">P</div></td>
+          <td>37 / 40</td>
+          <td>
+            <div data-tooltip="Carlie Care Kids Academy">
+              <span class="tag-chip">Carlie Care Kids Academy</span>
+            </div>
+          </td>
+          <td>
+            <div class="mgr-bubble-group">
+              <span class="mgr-bubble" data-tooltip="Monique Rouege">M</span>
+              <span class="mgr-bubble" data-tooltip="Tramaine Fountain">T</span>
+              <span class="mgr-bubble" data-tooltip="Lajuanda Lewis">L</span>
+            </div>
+            <div class="mgr-dd-panel">
+              <span class="mgr-dd-item">Monique Rouege</span>
+              <span class="mgr-dd-item">Tramaine Fountain</span>
+              <span class="mgr-dd-item">Lajuanda Lewis</span>
+            </div>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div><!-- /Strategy 3 -->
+
 <script>
 (function () {
   var tip = document.getElementById('global-tip');
@@ -868,6 +1419,24 @@
       }
     });
   });
+
+  // S3 manager bubble group dropdowns
+  document.querySelectorAll('.mgr-bubble-group').forEach(function (group) {
+    group.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var panel = group.nextElementSibling;
+      if (!panel || !panel.classList.contains('mgr-dd-panel')) return;
+      var isOpen = panel.classList.contains('open');
+      document.querySelectorAll('.mgr-dd-panel.open').forEach(function (p) { p.classList.remove('open'); });
+      if (!isOpen) {
+        var rect = group.getBoundingClientRect();
+        panel.style.left = rect.left + 'px';
+        panel.style.top  = (rect.bottom + 4) + 'px';
+        panel.classList.add('open');
+      }
+    });
+  });
+
   document.addEventListener('click', function () {
     document.querySelectorAll('.mgr-dd-panel.open').forEach(function (p) { p.classList.remove('open'); });
   });
