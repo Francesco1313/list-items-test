@@ -407,7 +407,6 @@
     .mgr-bubble-group {
       display: flex;
       align-items: center;
-      gap: 4px;
       cursor: pointer;
     }
 
@@ -424,8 +423,13 @@
       justify-content: center;
       flex-shrink: 0;
       cursor: pointer;
+      border: 2px solid #fff;
+      position: relative;
+      z-index: 1;
+      margin-left: -8px;
     }
-    .mgr-bubble:hover { background: #17835f; }
+    .mgr-bubble:first-child { margin-left: 0; }
+    .mgr-bubble:hover { background: #17835f; z-index: 2; }
 
     .mgr-bubble-more {
       width: 26px;
@@ -440,9 +444,12 @@
       justify-content: center;
       flex-shrink: 0;
       cursor: pointer;
-      border: 1px solid #b2ddd1;
+      border: 2px solid #fff;
+      position: relative;
+      z-index: 1;
+      margin-left: -8px;
     }
-    .mgr-bubble-more:hover { background: #d0ede6; }
+    .mgr-bubble-more:hover { background: #d0ede6; z-index: 2; }
   </style>
 </head>
 <body>
@@ -453,7 +460,7 @@
 <div id="global-tip"></div>
 
 <!-- ═══════════════════════════════════════════════════════════════
-     STRATEGY 1 — Title wraps up to 2 lines
+     STRATEGY 1
 ════════════════════════════════════════════════════════════════ -->
 <div class="section">
   <div class="section-header">
@@ -463,230 +470,14 @@
       <li>Title column is wider. Text wraps up to 2 lines.</li>
       <li>Titles exceeding 2 lines are truncated with ellipsis and show full text on hover via tooltip.</li>
       <li>Tags column is narrower. Chips truncated at ~18 characters with tooltip on hover showing full label.</li>
-      <li>The date and time are shown on two lines — the date on top, the time below in a smaller, lighter label. This keeps each date column narrower and leaves more horizontal space for the title.</li>
-      <li>Row height is determined by the number of group managers. All managers are listed and the row grows to fit them.</li>
-      <li>If a group has more than 3 managers, only the first 3 are shown. A … icon appears below; clicking it expands the row to reveal all managers.</li>
-      <li>Variable row height — rows are not uniform in height across the table.
-        <span class="risky-badge">⚠ risky</span>
-      </li>
-    </ul>
-    <div class="risky-explanation">
-      <strong>Variable row height risk:</strong> Row heights differ row-by-row depending on the number of managers. This can make the table feel visually uneven and hard to scan at a glance.
-    </div>
-  </div>
-
-  <div class="table-wrap">
-    <table class="s1">
-      <colgroup>
-        <col class="col-title" />
-        <col class="col-created" />
-        <col class="col-updated" />
-        <col class="col-products" />
-        <col class="col-members" />
-        <col class="col-tags" />
-        <col class="col-managers" />
-      </colgroup>
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Created</th>
-          <th>Updated</th>
-          <th>Products</th>
-          <th>Members</th>
-          <th>Tags</th>
-          <th>Group managers</th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <!-- ① Bright Star — short, fits 1 line, no tooltip -->
-        <tr>
-          <td>
-            <div data-tooltip="Bright Star">
-              <span class="cell-title clamp2">Bright Star</span>
-            </div>
-          </td>
-          <td>
-            <span class="date-primary">13 Nov 2025</span>
-            <span class="date-secondary">11:11</span>
-          </td>
-          <td>
-            <span class="date-primary">13 Nov 2025</span>
-            <span class="date-secondary">11:11</span>
-          </td>
-          <td><div class="product-avatar">P</div></td>
-          <td>8 / 30</td>
-          <td>
-            <div data-tooltip="Bright Star">
-              <span class="tag-chip">Bright Star</span>
-            </div>
-          </td>
-          <td><span class="manager-name">Rockeisha Walker</span></td>
-        </tr>
-
-        <!-- ② The Learning Tree Academy — medium, fits 1 line -->
-        <tr>
-          <td>
-            <div data-tooltip="The Learning Tree Academy">
-              <span class="cell-title clamp2">The Learning Tree Academy</span>
-            </div>
-          </td>
-          <td>
-            <span class="date-primary">06 Nov 2025</span>
-            <span class="date-secondary">11:21</span>
-          </td>
-          <td>
-            <span class="date-primary">06 Nov 2025</span>
-            <span class="date-secondary">11:21</span>
-          </td>
-          <td><div class="product-avatar">P</div></td>
-          <td>9 / 30</td>
-          <td>
-            <div data-tooltip="The Learning Tree Academy">
-              <span class="tag-chip">The Learning Tree Academy</span>
-            </div>
-          </td>
-          <td><span class="manager-name">Calandra Robinson</span></td>
-        </tr>
-
-        <!-- ③ Franklin Community — wraps to 2 lines, NOT truncated -->
-        <tr>
-          <td>
-            <div data-tooltip="Franklin Community Learning Center at New Orleans">
-              <span class="cell-title clamp2">Franklin Community Learning Center at New Orleans</span>
-            </div>
-          </td>
-          <td>
-            <span class="date-primary">01 Oct 2025</span>
-            <span class="date-secondary">09:00</span>
-          </td>
-          <td>
-            <span class="date-primary">01 Oct 2025</span>
-            <span class="date-secondary">09:00</span>
-          </td>
-          <td><div class="product-avatar">P</div></td>
-          <td>15 / 30</td>
-          <td>
-            <div data-tooltip="Franklin Community Learning Center">
-              <span class="tag-chip">Franklin Community Learning Center</span>
-            </div>
-          </td>
-          <td><span class="manager-name">Dionne Phillips</span></td>
-        </tr>
-
-        <!-- ④ Kids of Excellence - St. Claude Community Center -->
-        <tr>
-          <td>
-            <div data-tooltip="Kids of Excellence - St. Claude Community Center">
-              <span class="cell-title clamp2">Kids of Excellence - St. Claude Community Center</span>
-            </div>
-          </td>
-          <td>
-            <span class="date-primary">23 Sep 2025</span>
-            <span class="date-secondary">20:33</span>
-          </td>
-          <td>
-            <span class="date-primary">23 Sep 2025</span>
-            <span class="date-secondary">20:33</span>
-          </td>
-          <td><div class="product-avatar">P</div></td>
-          <td>13 / 30</td>
-          <td>
-            <div data-tooltip="Kids of Excellence - St. Claude">
-              <span class="tag-chip">Kids of Excellence - St. Claude</span>
-            </div>
-          </td>
-          <td>
-            <span class="manager-name">Taneka Reddick</span>
-            <span class="manager-name">Martha Johnson</span>
-          </td>
-        </tr>
-
-        <!-- ⑤ Royal Castle — very long, wraps to 2 lines AND truncates -->
-        <tr>
-          <td>
-            <div data-tooltip="Royal Castle Child Development Center Extended Edition for Regional Campuses">
-              <span class="cell-title clamp2">Royal Castle Child Development Center Extended Edition for Regional Campuses</span>
-            </div>
-          </td>
-          <td>
-            <span class="date-primary">23 Sep 2025</span>
-            <span class="date-secondary">19:05</span>
-          </td>
-          <td>
-            <span class="date-primary">23 Sep 2025</span>
-            <span class="date-secondary">19:05</span>
-          </td>
-          <td><div class="product-avatar">P</div></td>
-          <td>1 / 30</td>
-          <td>
-            <div data-tooltip="Royal Castle Child Development Center">
-              <span class="tag-chip">Royal Castle Child Development Center</span>
-            </div>
-          </td>
-          <td>
-            <span class="manager-name">Pearlie Harris</span>
-            <span class="manager-name">Marcus Thompson</span>
-            <span class="manager-name">Linda Chen</span>
-            <div class="manager-overflow">
-              <span class="manager-name">Robert Davis</span>
-              <span class="manager-name">Sarah Williams</span>
-              <span class="manager-name">James Brown</span>
-            </div>
-            <button class="manager-expand-btn">···</button>
-          </td>
-        </tr>
-
-        <!-- ⑥ Carlie Care Kids Academy -->
-        <tr>
-          <td>
-            <div data-tooltip="Carlie Care Kids Academy">
-              <span class="cell-title clamp2">Carlie Care Kids Academy</span>
-            </div>
-          </td>
-          <td>
-            <span class="date-primary">19 Sep 2025</span>
-            <span class="date-secondary">17:32</span>
-          </td>
-          <td>
-            <span class="date-primary">18 Feb 2026</span>
-            <span class="date-secondary">11:48</span>
-          </td>
-          <td><div class="product-avatar">P</div></td>
-          <td>37 / 40</td>
-          <td>
-            <div data-tooltip="Carlie Care Kids Academy">
-              <span class="tag-chip">Carlie Care Kids Academy</span>
-            </div>
-          </td>
-          <td>
-            <span class="manager-name">Monique Rouege</span>
-            <span class="manager-name">Tramaine Fountain</span>
-            <span class="manager-name">Lajuanda Lewis</span>
-          </td>
-        </tr>
-
-      </tbody>
-    </table>
-  </div>
-</div><!-- /Strategy 1 -->
-
-
-<!-- ═══════════════════════════════════════════════════════════════
-     STRATEGY 1 — ALTERNATIVE: Fixed default height, max 2 managers
-════════════════════════════════════════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <div class="strategy-label">Strategy 1 — Alternative</div>
-    <h2>Fixed default row height — max 2 managers</h2>
-    <ul class="spec-list">
-      <li>Title column is wider. Text wraps up to 2 lines.</li>
-      <li>Titles exceeding 2 lines are truncated with ellipsis and show full text on hover via tooltip.</li>
-      <li>Tags column is narrower. Chips truncated at ~18 characters with tooltip on hover showing full label.</li>
       <li>The date and time are shown on two lines — the date on top, the time below in a smaller, lighter label.</li>
       <li>All rows have a default fixed height. Up to 2 managers are shown by default.</li>
       <li>If a group has more than 2 managers, only the first 2 are shown. A … icon appears below; clicking it expands the row to reveal all managers.</li>
     </ul>
+    <div class="info-banner">
+      <span class="info-banner-icon">i</span>
+      <span><strong>Alternative:</strong> row height is variable and determined by the number of group managers. Up to 3 managers are shown by default. If a group has more than 3 managers, only the first 3 are shown. A … icon appears; clicking it expands the row to reveal all managers.</span>
+    </div>
   </div>
 
   <div class="table-wrap">
@@ -1108,7 +899,7 @@
       <li>With many managers, bubbles may overflow or wrap the cell unpredictably.
         <span class="risky-badge">⚠ risky</span>
       </li>
-      <li>Requires a new circular avatar bubble component not currently in the design system.
+      <li>Requires a new circular avatar bubble component that may not currently exist in the design system.
         <span class="risky-badge">⚠ risky</span>
       </li>
     </ul>
@@ -1116,7 +907,7 @@
       <strong>Scalability risk:</strong> If a group has many managers, the bubble row overflows or wraps, making the cell taller and less predictable across rows.
     </div>
     <div class="risky-explanation">
-      <strong>New component risk:</strong> This pattern requires a new circular avatar bubble component that does not currently exist in the design system. This adds implementation effort and design review overhead.
+      <strong>New component risk:</strong> This pattern requires a new circular avatar bubble component that may not currently exist in the design system. This adds implementation effort and design review overhead.
     </div>
   </div>
 
